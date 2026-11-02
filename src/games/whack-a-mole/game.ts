@@ -5,6 +5,8 @@ const { width: WIDTH, height: HEIGHT } = theme.canvas;
 export const ROUND_SECONDS = 30;
 export const POINTS_PER_WHACK = 10;
 export const MOLE_RADIUS = 36;
+/** How far a raised mole's body reaches below the hole's centre. */
+export const MOLE_BODY_DEPTH = 24;
 const COLUMNS = 3;
 const ROWS = 3;
 /** Seconds between moles at the start and at the end of a round. */
@@ -70,10 +72,16 @@ export function popUp(state: WhackAMoleState, random: () => number = Math.random
   return true;
 }
 
+/** Whether a point is on a raised mole: its round head, or the body below it. */
+export function onMole(hole: Hole, x: number, y: number): boolean {
+  if (y <= hole.y) return Math.hypot(x - hole.x, y - hole.y) <= MOLE_RADIUS;
+  return y <= hole.y + MOLE_BODY_DEPTH && Math.abs(x - hole.x) <= MOLE_RADIUS;
+}
+
 /** Whacks at a point. Scores and drops the mole if one is up there. */
 export function whack(state: WhackAMoleState, x: number, y: number): boolean {
   if (state.phase !== 'playing') return false;
-  const hole = state.holes.find((h) => h.up > 0 && Math.hypot(x - h.x, y - h.y) <= MOLE_RADIUS);
+  const hole = state.holes.find((h) => h.up > 0 && onMole(h, x, y));
   if (!hole) return false;
   hole.up = 0;
   hole.bonk = 0;
@@ -133,8 +141,8 @@ function draw(ctx: CanvasRenderingContext2D, state: WhackAMoleState) {
       ctx.fillStyle = colors.muted;
       ctx.beginPath();
       ctx.arc(hole.x, hole.y, MOLE_RADIUS, Math.PI, 0);
-      ctx.lineTo(hole.x + MOLE_RADIUS, hole.y + 24);
-      ctx.lineTo(hole.x - MOLE_RADIUS, hole.y + 24);
+      ctx.lineTo(hole.x + MOLE_RADIUS, hole.y + MOLE_BODY_DEPTH);
+      ctx.lineTo(hole.x - MOLE_RADIUS, hole.y + MOLE_BODY_DEPTH);
       ctx.closePath();
       ctx.fill();
       ctx.fillStyle = colors.background;
