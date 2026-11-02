@@ -52,6 +52,25 @@ describe('whack-a-mole', () => {
     expect(hole.up).toBe(0);
   });
 
+  it('scores a whack on the lower corner of a mole body', () => {
+    const state = createState();
+    popUp(state, first);
+    const hole = state.holes[0];
+    expect(whack(state, hole.x + 34, hole.y + 20)).toBe(true);
+    expect(state.score).toBe(POINTS_PER_WHACK);
+    expect(hole.up).toBe(0);
+  });
+
+  it('scores nothing just outside the drawn mole', () => {
+    const state = createState();
+    popUp(state, first);
+    const hole = state.holes[0];
+    expect(whack(state, hole.x + 40, hole.y + 20)).toBe(false);
+    expect(whack(state, hole.x + 30, hole.y - 30)).toBe(false);
+    expect(state.score).toBe(0);
+    expect(hole.up).toBeGreaterThan(0);
+  });
+
   it('scores nothing for whacking an empty hole or a mole twice', () => {
     const state = createState();
     const hole = state.holes[0];

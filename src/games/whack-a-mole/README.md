@@ -20,6 +20,6 @@ Your final score is saved to the carnival's score board when the round ends.
 
 ## Files
 
-- `game.ts`: the game logic (`createState`, `step`, `popUp`, `whack`, `spawnGap`,
-  `upTime`) and the `whackAMole` entry, the default export the midway finds.
+- `game.ts`: the game logic (`createState`, `step`, `popUp`, `whack`, `onMole`,
+  `spawnGap`, `upTime`) and the `whackAMole` entry, the default export the midway finds.
 - `game.test.ts`: tests for the game logic.
