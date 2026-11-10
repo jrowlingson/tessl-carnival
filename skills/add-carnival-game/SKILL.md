@@ -47,7 +47,12 @@ Read `src/games/water-cannon/game.ts` first: it is the pattern to copy.
 7. **Don't touch `src/games/index.ts`.** It finds every folder whose `game.ts`
    has a default export, so the new game registers itself.
 8. **Test the logic** in `game.test.ts`: the starting state, scoring, how a round
-   ends, and any edge the README promises.
+   ends, and any edge the README promises. If the player clicks or aims at
+   something, its hit test must cover the same shape `draw` paints. Don't just
+   copy the water cannon's circle `isHit`: it only fits because its targets are
+   drawn as circles. Give the sizes that the drawing and the hit test share named
+   constants, and test a click just inside and just outside the drawn edge, not
+   only at the centre.
 9. **Write the README:** how to play, how scoring works and the files in the folder.
 10. **Run `npm run format`, then `npm run check`,** and fix anything it
     reports. If you can open a browser, also run `npm run dev`, walk to the new
